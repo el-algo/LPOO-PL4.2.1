@@ -1,0 +1,64 @@
+@startuml
+
+package game.character {
+
+    ' Interfaces
+    interface IHealthManager {
+        + takeDamage(int amount)
+        + heal(int amount)
+        + getHealth() : int
+    }
+
+    interface IInventory {
+        + addItem(String item)
+        + removeItem(String item)
+        + listItems()
+    }
+
+    ' Clases que implementan las interfaces
+    class HealthManager implements IHealthManager {
+        - int health
+        + HealthManager(int initialHealth)
+        + takeDamage(int amount)
+        + heal(int amount)
+        + getHealth() : int
+        - updateHealthDisplay()
+    }
+
+    class Inventory implements IInventory {
+        - List<String> items
+        + addItem(String item)
+        + removeItem(String item)
+        + listItems()
+    }
+
+    ' Clase principal que usa las interfaces
+    class Player {
+        - IHealthManager healthManager
+        - IInventory inventory
+        + Player(IHealthManager healthManager, IInventory inventory)
+        + move()
+        + jump()
+        + takeDamage(int damage)
+        + heal(int amount)
+        + addItemToInventory(String item)
+        + listInventoryItems()
+    }
+
+    ' Relación de implementación
+    IHealthManager <|.. HealthManager
+    IInventory <|.. Inventory
+
+    ' Relación de dependencia (Player usa IHealthManager y IInventory)
+    Player --> IHealthManager : uses
+    Player --> IInventory : uses
+}
+
+' Clase principal del programa
+class Main {
+    + main(String[] args)
+}
+
+Main --> Player : creates
+
+@enduml
